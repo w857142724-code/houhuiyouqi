@@ -1,0 +1,1350 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070b14">
+<title>后会友期 · 第五对过期朋友</title>
+<style>
+:root{
+  --ink:#ece5d6;
+  --dim:#959eaf;
+  --amber:#f2b76a;
+  --amber2:#ffdca8;
+  --red:#c9482f;
+  --bg0:#070b14;
+  --bg1:#101a2b;
+  --line:rgba(242,183,106,.20);
+  --card:rgba(255,255,255,.035);
+  --serif:"Songti SC","Noto Serif SC","Source Han Serif SC",ui-serif,Georgia,"STSong",serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--bg0);color:var(--ink);font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7;
+}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input{font-family:inherit}
+
+/* ---------- background ---------- */
+#bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:
+  radial-gradient(120% 80% at 50% 0%,#14203a 0%,#0a1120 45%,#06080f 100%);
+}
+.glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:drift 26s ease-in-out infinite alternate}
+.g1{width:52vw;height:52vw;left:-14vw;top:-10vw;background:radial-gradient(circle,rgba(242,183,106,.30),transparent 65%)}
+.g2{width:60vw;height:60vw;right:-22vw;bottom:-18vw;background:radial-gradient(circle,rgba(70,110,190,.30),transparent 68%);animation-delay:-12s}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(4vw,3vh,0) scale(1.12)}}
+.streaks{
+  position:absolute;inset:-20%;
+  background:repeating-linear-gradient(102deg,transparent 0 46px,rgba(242,183,106,.055) 46px 48px,transparent 48px 120px);
+  animation:slide 5.5s linear infinite;opacity:.8;
+  mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent);
+}
+@keyframes slide{from{transform:translateX(-120px)}to{transform:translateX(120px)}}
+.vignette{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 45%,transparent 40%,rgba(0,0,0,.62) 100%)}
+
+/* ---------- layout ---------- */
+#app{position:relative;z-index:2}
+.screen{
+  display:none;min-height:100dvh;max-width:680px;margin:0 auto;
+  padding:clamp(22px,5.5vw,44px) clamp(20px,5vw,36px);
+  flex-direction:column;
+}
+.screen.on{display:flex;animation:screenIn .55s ease both}
+@keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- title ---------- */
+#scr-title{justify-content:center;text-align:center;position:relative}
+.kicker{
+  font-size:12px;letter-spacing:.42em;color:var(--amber);text-indent:.42em;
+  opacity:.9;margin-bottom:26px;font-weight:600;
+}
+.big-title{
+  font-family:var(--serif);font-size:clamp(48px,15vw,86px);line-height:1.02;
+  letter-spacing:.10em;text-indent:.10em;font-weight:600;
+  background:linear-gradient(180deg,#fff8ea,#f0c88f 70%,#c99a5c);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 40px rgba(242,183,106,.18);
+}
+.big-sub{
+  margin-top:16px;font-family:var(--serif);font-size:clamp(14px,4.2vw,18px);
+  letter-spacing:.22em;text-indent:.22em;color:var(--dim);
+}
+.title-desc{margin-top:30px;font-size:14.5px;color:#b6bdcb;line-height:2}
+.title-desc b{color:var(--amber2);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:26px}
+.chip{
+  font-size:11.5px;color:#d9b98d;border:1px solid rgba(242,183,106,.24);
+  padding:5px 11px;border-radius:999px;background:rgba(242,183,106,.05);
+  letter-spacing:.04em;
+}
+.title-actions{margin-top:auto;padding-top:44px;display:flex;flex-direction:column;gap:12px}
+.tiny-note{font-size:11px;color:#5f6878;text-align:center;margin-top:16px;line-height:1.8}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:15px 22px;border-radius:14px;font-size:15px;letter-spacing:.08em;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);
+  transition:transform .16s ease,background .2s,border-color .2s,color .2s;
+  min-height:50px;
+}
+.btn:active{transform:scale(.97)}
+.btn.primary{
+  background:linear-gradient(135deg,#f2b76a,#e09a4e);color:#2a1a08;font-weight:700;
+  border-color:transparent;box-shadow:0 10px 30px -12px rgba(242,183,106,.8);
+}
+.btn.primary:hover{background:linear-gradient(135deg,#ffc77f,#eda556)}
+.btn.ghost:hover{background:rgba(255,255,255,.06)}
+.btn.wide{width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.row .btn{flex:1 1 140px}
+
+/* ---------- setup ---------- */
+#scr-setup{justify-content:center}
+.setup-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+.setup-tag{font-size:11.5px;letter-spacing:.28em;color:var(--amber)}
+.dots{display:flex;gap:6px}
+.dots i{width:18px;height:2px;background:rgba(255,255,255,.14);border-radius:2px;transition:.3s}
+.dots i.on{background:var(--amber)}
+.step-no{font-size:11.5px;letter-spacing:.24em;color:#7c8598;margin-bottom:12px}
+.step-q{font-family:var(--serif);font-size:clamp(21px,5.6vw,27px);font-weight:600;line-height:1.5;letter-spacing:.02em}
+.step-hint{font-size:12.5px;color:#7f8899;margin-top:10px;line-height:1.8}
+.step-body{margin-top:28px;display:flex;flex-direction:column;gap:10px}
+.field{
+  width:100%;padding:15px 16px;border-radius:13px;font-size:16px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);
+  color:var(--ink);outline:none;transition:.2s;
+}
+.field::placeholder{color:#5c6577}
+.field:focus{border-color:rgba(242,183,106,.55);background:rgba(242,183,106,.05)}
+.opt{
+  text-align:left;padding:15px 17px;border-radius:13px;font-size:14.5px;
+  border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03);
+  transition:.18s;display:flex;align-items:center;gap:12px;line-height:1.5;
+}
+.opt:hover{border-color:rgba(242,183,106,.45);background:rgba(242,183,106,.06)}
+.opt:active{transform:scale(.985)}
+.opt .k{
+  font-size:11px;color:#8b7a5c;width:18px;flex:none;font-family:var(--serif);
+}
+.opt.sel{border-color:var(--amber);background:rgba(242,183,106,.12)}
+
+/* ---------- HUD ---------- */
+.hud{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07)}
+.hud-day{font-family:var(--serif);font-size:17px;letter-spacing:.08em}
+.hud-day small{display:block;font-family:var(--sans);font-size:10.5px;color:#7c8598;letter-spacing:.18em;margin-top:3px;font-weight:400}
+.bars{display:flex;gap:10px}
+.bar{width:52px}
+.bar i{display:block;font-style:normal;font-size:9.5px;color:#77808f;letter-spacing:.1em;margin-bottom:4px}
+.bar s{
+  display:block;height:3px;border-radius:2px;background:rgba(255,255,255,.10);
+  position:relative;overflow:hidden;text-decoration:none;
+}
+.bar s b{position:absolute;inset:0 auto 0 0;width:0;border-radius:2px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.bar.knot s b{background:linear-gradient(90deg,#8a4a3d,#d5674c)}
+.bar.truth s b{background:linear-gradient(90deg,#a67c3f,#ffd08a)}
+.bar.face s b{background:linear-gradient(90deg,#3f5a72,#7fa8c9)}
+
+/* ---------- stage ---------- */
+.stage{flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px 0 4px;cursor:pointer;position:relative;z-index:3}
+.scene-tag{font-size:10.5px;letter-spacing:.26em;color:#7c8598;margin-bottom:18px}
+.narration p{
+  font-family:var(--serif);font-size:clamp(15px,4.4vw,17px);line-height:2.05;
+  color:#ddd6c7;margin-bottom:10px;opacity:0;transform:translateY(8px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.narration p.in{opacity:1;transform:none}
+.quote{margin-top:16px;opacity:0;transform:translateY(10px);transition:.7s ease}
+.quote.in{opacity:1;transform:none}
+.quote .spk{
+  display:inline-block;font-size:11px;letter-spacing:.2em;color:#2a1a08;
+  background:linear-gradient(135deg,#f2b76a,#dda257);padding:3px 9px;border-radius:5px;
+  margin-bottom:11px;font-weight:700;
+}
+.quote p{
+  font-family:var(--serif);font-size:clamp(19px,5.6vw,24px);line-height:1.85;
+  color:#fff3dd;letter-spacing:.02em;
+  text-shadow:0 0 30px rgba(242,183,106,.22);
+}
+.tap-hint{
+  text-align:center;font-size:11px;letter-spacing:.24em;color:#5f6878;margin-top:22px;
+  animation:breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{opacity:.35}50%{opacity:.9}}
+
+/* ---------- choices ---------- */
+.choices{display:flex;flex-direction:column;gap:8px;padding-top:12px;position:relative;z-index:4}
+.choice{
+  text-align:left;padding:12px 15px;border-radius:13px;font-size:14px;line-height:1.55;
+  border:1px solid rgba(255,255,255,.10);background:rgba(9,14,24,.55);
+  backdrop-filter:blur(6px);transition:.18s;display:flex;gap:11px;align-items:flex-start;
+  animation:choiceIn .4s ease both;
+}
+@keyframes choiceIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.choice:hover{border-color:rgba(242,183,106,.55);background:rgba(242,183,106,.09)}
+.choice:active{transform:scale(.985)}
+.choice .k{
+  font-family:var(--serif);font-size:11.5px;color:#8b7a5c;flex:none;width:15px;padding-top:2px;
+}
+.choice.dim{opacity:.35;pointer-events:none}
+.reply{
+  padding:18px;border-radius:14px;background:rgba(255,255,255,.04);
+  border-left:2px solid var(--amber);animation:choiceIn .5s ease both;
+}
+.reply .who{font-size:11px;letter-spacing:.18em;color:var(--amber);margin-bottom:9px;display:block}
+.reply p{font-family:var(--serif);font-size:15.5px;line-height:2;color:#e6dfd0}
+
+/* ---------- 花字 ---------- */
+.huazi{
+  position:fixed;left:50%;top:34%;transform:translate(-50%,-50%) rotate(-7deg);
+  font-family:var(--serif);font-weight:700;font-size:clamp(26px,7.5vw,44px);
+  color:#ffd9a0;border:3px solid #ffd9a0;padding:.28em .5em;border-radius:8px;
+  background:rgba(10,8,6,.55);text-align:center;letter-spacing:.04em;white-space:nowrap;
+  z-index:60;pointer-events:none;
+  animation:stampIn .45s cubic-bezier(.2,1.7,.4,1) both,fadeOut .6s ease 1.5s both;
+  box-shadow:0 0 50px rgba(242,183,106,.25);
+}
+@keyframes stampIn{from{opacity:0;transform:translate(-50%,-50%) rotate(-7deg) scale(1.5)}to{opacity:1;transform:translate(-50%,-50%) rotate(-7deg) scale(1)}}
+@keyframes fadeOut{to{opacity:0}}
+
+/* ---------- BGM 开关 ---------- */
+.bgm{
+  position:fixed;top:calc(10px + env(safe-area-inset-top));right:calc(12px + env(safe-area-inset-right));
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(242,183,106,.28);background:rgba(10,15,25,.55);
+  color:#e9c48a;font-size:15px;line-height:1;z-index:40;
+  backdrop-filter:blur(8px);opacity:.55;transition:opacity .25s,color .25s;
+}
+.bgm:hover{opacity:1}
+.bgm::after{
+  content:'';position:absolute;width:23px;height:1.5px;background:currentColor;
+  transform:rotate(-45deg);opacity:0;transition:opacity .2s;border-radius:2px;
+}
+.bgm.off{color:#8d8778;opacity:.4}
+.bgm.off::after{opacity:.9}
+
+/* ---------- 弹幕 ---------- */
+#danmaku{position:fixed;inset:0;pointer-events:none;z-index:5;overflow:hidden}
+.dm{
+  position:absolute;white-space:nowrap;font-size:12px;color:rgba(226,232,242,.34);
+  text-shadow:0 1px 4px rgba(0,0,0,.9);animation:dmRun linear forwards;
+}
+@keyframes dmRun{from{transform:translateX(100vw)}to{transform:translateX(-110%)}}
+
+/* ---------- 观察室 ---------- */
+#scr-inter{justify-content:center}
+.obs-head{display:flex;align-items:center;gap:9px;font-size:11.5px;letter-spacing:.28em;color:var(--amber);margin-bottom:28px}
+.obs-dot{width:6px;height:6px;border-radius:50%;background:#e0533c;box-shadow:0 0 12px #e0533c;animation:breathe 1.6s infinite}
+.obs-list{display:flex;flex-direction:column;gap:12px;min-height:260px}
+.obs-card{
+  padding:16px 17px;border-radius:14px;background:linear-gradient(150deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);opacity:0;transform:translateY(10px);
+  animation:choiceIn .5s ease forwards;
+}
+.obs-card .who{font-size:11px;letter-spacing:.16em;color:var(--amber);margin-bottom:7px}
+.obs-card p{font-size:14.5px;line-height:1.85;color:#dcd6c8;font-family:var(--serif)}
+#obsNext{margin-top:30px}
+
+/* ---------- 结局 ---------- */
+#scr-ending{justify-content:center;text-align:left}
+.end-label{font-size:11px;letter-spacing:.3em;color:#7c8598;margin-bottom:18px}
+#endTitle{
+  font-family:var(--serif);font-size:clamp(38px,11vw,60px);font-weight:600;
+  letter-spacing:.08em;line-height:1.15;
+  background:linear-gradient(180deg,#fff6e4,#f0c88f 75%,#cf9f62);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.end-huazi{
+  display:inline-block;margin-top:16px;font-size:12.5px;color:#e8a98d;
+  border:1px solid rgba(201,72,47,.5);background:rgba(201,72,47,.10);
+  padding:6px 12px;border-radius:6px;letter-spacing:.06em;
+}
+.end-body{margin-top:26px}
+.end-body p{
+  font-family:var(--serif);font-size:15.5px;line-height:2.1;color:#d8d2c4;margin-bottom:13px;
+  opacity:0;animation:fadeUp .7s ease forwards;
+}
+.end-body p:nth-child(1){animation-delay:.05s}
+.end-body p:nth-child(2){animation-delay:.25s}
+.end-body p:nth-child(3){animation-delay:.45s}
+.end-body p:nth-child(4){animation-delay:.65s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.end-line{
+  margin-top:22px;padding:16px 0 16px 16px;border-left:2px solid var(--amber);
+  font-family:var(--serif);font-size:16px;line-height:1.9;color:#fff3dd;
+  animation:fadeUp .7s ease .8s both;
+}
+.end-stats{
+  display:flex;gap:16px;flex-wrap:wrap;margin-top:22px;font-size:11.5px;color:#7f8899;
+  letter-spacing:.06em;animation:fadeUp .7s ease 1s both;
+}
+.end-stats span b{color:var(--amber);font-weight:600}
+.end-obs{
+  margin-top:18px;font-size:12.5px;color:#909aab;line-height:1.9;
+  padding:12px 14px;border-radius:10px;background:rgba(255,255,255,.03);
+  animation:fadeUp .7s ease 1.15s both;
+}
+.end-obs b{color:#c7b08a;font-weight:500}
+
+/* ---------- 车票 ---------- */
+#scr-card{justify-content:center;align-items:center}
+#ticket{
+  width:100%;max-width:340px;height:auto;border-radius:16px;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.9),0 0 0 1px rgba(242,183,106,.15);
+  animation:cardIn .8s cubic-bezier(.2,.9,.3,1) both;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.95)}to{opacity:1;transform:none}}
+#scr-card .row{width:100%;max-width:360px}
+
+.tapzone{position:fixed;inset:0;z-index:1}
+
+/* 矮屏兜底 */
+@media (max-height:760px){
+  .narration p{font-size:15px;line-height:1.95;margin-bottom:8px}
+  .quote p{font-size:clamp(17px,5vw,21px)}
+  .scene-tag{margin-bottom:12px}
+  .hud{padding-bottom:10px}
+  .choice{padding:10px 13px;font-size:13.5px;line-height:1.5}
+  .choices{padding-top:10px;gap:7px}
+  .stage{padding:10px 0 2px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01s!important;transition-duration:.01s!important}
+  .streaks{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="bg" aria-hidden="true">
+  <div class="glow g1"></div><div class="glow g2"></div>
+  <div class="streaks"></div>
+  <div class="vignette"></div>
+</div>
+<button class="bgm" id="bgmBtn" aria-label="背景音乐开关" aria-pressed="true">♪</button>
+<div id="danmaku" aria-hidden="true"></div>
+
+<main id="app">
+
+  <!-- 标题 -->
+  <section id="scr-title" class="screen on">
+    <div class="kicker">一档关于走散的综艺</div>
+    <h1 class="big-title">后会友期</h1>
+    <div class="big-sub">第五对过期朋友</div>
+    <p class="title-desc">
+      十八天，一趟不许下车的列车，<br>
+      一个你<b>说不出口</b>的人。
+    </p>
+    <div class="chips">
+      <span class="chip"># 画地为牢</span>
+      <span class="chip"># 密友数量为零</span>
+      <span class="chip"># 允许不圆满</span>
+    </div>
+    <div class="title-actions">
+      <button class="btn primary wide" id="startBtn">上 车</button>
+      <p class="tiny-note">本模拟器纯属虚构，请勿对号入座。<br>对号入座也没用，ta 不会看到的。</p>
+    </div>
+  </section>
+
+  <!-- 登记 -->
+  <section id="scr-setup" class="screen">
+    <div class="setup-top">
+      <div class="setup-tag">节目组登记处</div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div id="stepBox"></div>
+  </section>
+
+  <!-- 正片 -->
+  <section id="scr-game" class="screen">
+    <header class="hud">
+      <div class="hud-day" id="hudDay">第 1 天<small id="hudPlace">第 05 节车厢</small></div>
+      <div class="bars">
+        <div class="bar knot"><i>心结</i><s><b id="barKnot"></b></s></div>
+        <div class="bar truth"><i>真心</i><s><b id="barTruth"></b></s></div>
+        <div class="bar face"><i>面子</i><s><b id="barFace"></b></s></div>
+      </div>
+    </header>
+    <div class="stage" id="stage">
+      <div class="scene-tag" id="sceneTag"></div>
+      <div class="narration" id="narration"></div>
+      <div class="quote" id="quoteBox" hidden>
+        <span class="spk" id="spkName"></span>
+        <p id="quoteText"></p>
+      </div>
+      <div class="tap-hint" id="tapHint">轻点继续</div>
+    </div>
+    <div class="choices" id="choices"></div>
+  </section>
+
+  <!-- 观察室 -->
+  <section id="scr-inter" class="screen">
+    <div class="obs-head"><span class="obs-dot"></span>观 察 室</div>
+    <div class="obs-list" id="obsList"></div>
+    <button class="btn primary wide" id="obsNext">继续看正片</button>
+  </section>
+
+  <!-- 结局 -->
+  <section id="scr-ending" class="screen">
+    <div class="end-label" id="endLabel">第 18 天 · 终点站</div>
+    <h1 id="endTitle"></h1>
+    <div class="end-huazi" id="endHuazi"></div>
+    <div class="end-body" id="endBody"></div>
+    <div class="end-line" id="endLine"></div>
+    <div class="end-stats" id="endStats"></div>
+    <div class="end-obs" id="endObs"></div>
+    <div class="row">
+      <button class="btn primary" id="toCard">生成我的车票</button>
+      <button class="btn ghost" id="replay">再上一趟车</button>
+    </div>
+  </section>
+
+  <!-- 车票 -->
+  <section id="scr-card" class="screen">
+    <canvas id="ticket" width="750" height="1180"></canvas>
+    <div class="row">
+      <button class="btn primary" id="dl">保存车票</button>
+      <button class="btn ghost" id="copy">复制文案</button>
+      <button class="btn ghost" id="again">再来一次</button>
+    </div>
+    <p class="tiny-note" style="margin-top:14px">手机上存不下来，就长按车票保存图片。</p>
+  </section>
+
+</main>
+
+<script>
+(function(){
+'use strict';
+
+/* ============ 工具 ============ */
+const $ = s => document.querySelector(s);
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+const rnd = (a,b)=>a+Math.random()*(b-a);
+
+const state = {
+  p:'你', n:'ta', yearsText:'三年', yearsLabel:'两三年',
+  moment:'那天', reason:'', secret:'',
+  knot:72, truth:26, face:55, avoid:0, sarcasm:0,
+  flags:{}, scene:0
+};
+
+function fmt(str){
+  return String(str)
+    .replace(/\{N\}/g, state.n)
+    .replace(/\{P\}/g, state.p)
+    .replace(/\{Y\}/g, state.yearsText)
+    .replace(/\{M\}/g, state.moment)
+    .replace(/\{S\}/g, state.secret || '……');
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('on'));
+  if(id !== 'scr-game'){ const layer = document.getElementById('danmaku'); if(layer) layer.innerHTML = ''; }
+  const el = document.getElementById(id);
+  el.classList.add('on');
+  window.scrollTo({top:0,behavior:'instant'});
+  return el;
+}
+
+/* ============ 文案：五步登记 ============ */
+const YEARS_OPTS = [
+  {label:'不到一年', text:'大半年', y:'大半年'},
+  {label:'两三年',   text:'三年',   y:'三年'},
+  {label:'五年往上', text:'五年',   y:'五年'},
+  {label:'十年以上', text:'十年',   y:'十年'}
+];
+const REASON_OPTS = [
+  {label:'一场没吵完的架',    moment:'吵架那天'},
+  {label:'一个没解释清的误会', moment:'那个误会'},
+  {label:'一件越了界的事',    moment:'越界那次'},
+  {label:'说不上来的某一天',  moment:'断联那天'}
+];
+
+/* ============ 文案：七场戏 ============ */
+const SCENES = [
+  {
+    day:'第 1 天', place:'第 05 节车厢', tag:'18:40 · 上车',
+    lines:[
+      '节目组把你们的车厢安排在最后一节，隔着一张折叠桌。窗外路灯一盏一盏地亮起来，追着车跑。',
+      '十八天，四对过期朋友，一趟不许下车的列车。',
+      '{N}正把行李箱往行李架上塞，背影比记忆里宽了一点。你没敢看太仔细。'
+    ],
+    spk:'{N}', quote:'……你还是坐里面吧，你晕车。',
+    choices:[
+      {t:'「谢谢，你还记得。」', eff:{truth:8,knot:-5,face:-3},
+       reply:'「记性好又不是什么优点。」ta 嘴上这么说，还是伸手把窗帘拉下来一半。'},
+      {t:'「不用，我早就不晕了。」', eff:{face:6,knot:3,truth:-2},
+       reply:'「哦。」ta 的手停在半空，过了两秒才把箱子推上去。'},
+      {t:'「这么多年没见，第一句就这个？」', eff:{sarcasm:1,face:4,knot:6,truth:-2}, huazi:'空气突然安静',
+       reply:'「那你想听什么？『好久不见，你瘦了』？」隔壁那对笑了，笑声从帘子后面飘过来。'},
+      {t:'「我去别的车厢待会儿。」', eff:{avoid:1,knot:5,face:2,truth:-3},
+       reply:'「随你。」ta 坐下来，把那半边桌子擦了两遍。'}
+    ]
+  },
+  {
+    day:'第 4 天', place:'第 07 节 餐车', tag:'12:10 · 午饭',
+    lines:[
+      '餐车只给一份菜单、一份餐具。节目组的意思很明确：你们得一起吃。',
+      '{N}把菜单推过来，又推回去，最后自己没拿。',
+      '窗外的麦田被晒得发白，一格一格往后退。'
+    ],
+    spk:'{N}', quote:'你点吧，我随便。',
+    choices:[
+      {t:'「我点你爱吃的。」', eff:{truth:7,knot:-4,face:-3},
+       reply:'「你还记得我爱吃什么？」ta 问得很轻，像怕自己听错。'},
+      {t:'「各点各的，AA。」', eff:{face:6,knot:2,truth:-3},
+       reply:'「行。」ta 低头看手机，其实屏幕早就黑了。'},
+      {t:'「你一说『随便』，我就知道有事。」', eff:{sarcasm:1,knot:4,truth:4,face:2},
+       reply:'「在你眼里我一直是这样的人？」ta 把菜单合上了。'},
+      {t:'「我去接杯水。」（结果在餐车磨蹭了二十分钟）', eff:{avoid:1,knot:5,truth:-4,face:1},
+       reply:'回来的时候，ta 已经点了两份，你那份凉了。ta 说：「我不知道你什么时候回来。」'}
+    ]
+  },
+  {
+    day:'第 7 天', place:'过道 · 折叠椅', tag:'01:20 · 停靠',
+    lines:[
+      '凌晨一点二十，车停在一个不报站名的小站。灯全灭着，只有过道尽头一点光。',
+      '{N}没睡，坐在折叠椅上，手机屏幕的光打在脸上，像一层薄薄的霜。',
+      '你走过去。ta 没有抬头，只是往旁边挪了挪，给你让出半张椅子。'
+    ],
+    spk:'{N}', quote:'{M}之后，我一直想问你——你当时是不是就打算，不说了。',
+    choices:[
+      {t:'「是。我当时就是不想说了。」', eff:{truth:12,knot:-8,face:-8}, flags:['toldTruth'],
+       reply:'「……」ta 很久没说话。「我猜到了。猜到，和听见，还是不一样。」'},
+      {t:'「现在说这些，还有意义吗。」', eff:{avoid:1,knot:8,face:4,truth:-4},
+       reply:'「没有意义。」ta 笑了一下，「我就是想问。问了七年。」'},
+      {t:'「你先说你的版本。」', eff:{truth:7,knot:-3,face:2},
+       reply:'ta 把手机扣在腿上。「我的版本里，你没错。」停了停，「可那不是我想要的版本。」'},
+      {t:'「早忘了。」', eff:{sarcasm:1,knot:10,truth:-6,face:6}, huazi:'死鸭子嘴硬',
+       reply:'「哦。」ta 站起来回铺位了。你一个人在那张折叠椅上坐到天亮。'}
+    ]
+  },
+  {
+    day:'第 11 天', place:'某站 · 月台', tag:'15:30 · 停靠 20 分钟',
+    lines:[
+      '节目组放你们下车二十分钟。陌生的站台、便利店，还有一列反方向开走的车。',
+      '{N}站在站台尽头看时刻表，看了很久，久到你走过去都没被发现。',
+      '风把 ta 的头发吹起来。你忽然想起来，你们以前也是这样并排站着，等一辆不会来的车。'
+    ],
+    spk:'{N}', quote:'这趟能到我家。',
+    choices:[
+      {t:'「你要走的话，我不拦你。」', eff:{face:8,knot:8,truth:-4},
+       reply:'「我知道你不拦。」ta 转过身，「你从来都不拦。」'},
+      {t:'「……再陪我坐两站。」', eff:{truth:10,knot:-6,face:-6},
+       reply:'「两站？」「两站。」ta 把车票塞回口袋，「行吧，反正也不差这两站。」'},
+      {t:'（走过去，和 ta 并排站着，什么也不说）', eff:{truth:6,knot:-4,face:-1},
+       reply:'ta 没有说话。风很大。你们的影子在站台灯下叠在一起，像很多年前那样。'},
+      {t:'「你是不是早就买好票了。」', eff:{sarcasm:1,knot:5,truth:3,face:3},
+       reply:'「你连这个都要怀疑？」ta 把口袋拍平给你看，「空的。」'}
+    ]
+  },
+  {
+    day:'第 14 天', place:'最后一节车厢', tag:'22:00 · 那封信',
+    lines:[
+      '节目组把你们关进最后一节车厢，只开一盏灯。桌上一个信封，里面是你们各自手机里那条——没发出去的消息。',
+      '规则很简单：念出来，或者当着对方的面删掉。',
+      '{N}的拇指停在屏幕上。你听见车厢连接处一直在响。'
+    ],
+    spk:'{N}', quote:'你先来，还是我先。',
+    choices:[
+      {t:'「我先。」', eff:{truth:12,knot:-10,face:-10}, flags:['readLetter'],
+       reply:'你先念了。念到一半声音就没了，但你还是念完了。ta 说：「原来你是这么想的。」停了一下，「我那条，比你长。」'},
+      {t:'「你先吧。」', eff:{truth:8,knot:-6,face:-4}, flags:['heard'],
+       reply:'ta 念得很慢，中间停了两次。念完把手机倒扣在桌上，像怕它还亮着。'},
+      {t:'「这环节就是给剪辑用的。」', eff:{sarcasm:1,avoid:1,knot:8,face:6}, huazi:'节目组：这波我们也没想到',
+       reply:'「那你就当没录。」ta 把信封推回桌子中间。灯还开着，谁也没动。'},
+      {t:'「能不能不录这段。」', eff:{truth:6,knot:-3,face:-2}, flags:['offCamera'],
+       reply:'节目组出去以后，ta 反而说得更多了。有些话，本来就说给一个人听的。'}
+    ]
+  },
+  {
+    day:'第 17 天', place:'采访间 · 单人', tag:'20:30 · 独白',
+    lines:[
+      '采访间只有一把椅子、一盏灯、一个不出声的镜头。',
+      '导演问：如果这趟车现在就靠站，你最想对{N}说的一句话是什么？',
+      '你发现，想说的和能说的之间，隔着{Y}。'
+    ],
+    spk:'导演', quote:'（镜头在等，不催你。）',
+    choices:[
+      {t:'「对不起。」', eff:{truth:8,knot:-6,face:-6},
+       reply:'（导演没说话。镜头后面有人轻轻吸了一下鼻子。）'},
+      {t:'「我一直没怪你，我只是没等到你解释。」', eff:{truth:10,knot:-8,face:-8}, flags:['truth2'],
+       reply:'（说完你自己愣了一下——这句话你排练过很多次，但没有一次说出口。）'},
+      {t:'「祝 ta 以后都好。」', eff:{face:6,truth:-2,knot:2},
+       reply:'（你说得很得体。得体到导演点了点头，然后把机器关了。）'},
+      {t:'（对着镜头沉默十秒）', eff:{avoid:1,knot:4,face:1}, huazi:'这段能上热搜',
+       reply:'（十秒。剪辑师后来把这段用了三次，配了三首不同的 BGM。）'}
+    ]
+  },
+  {
+    day:'第 18 天', place:'终点站 · 月台', tag:'09:00 · 到站',
+    lines:[
+      '十八天，二十四节车厢，最后一站。',
+      '站台上停着来接各自的车。{N}拖着箱子走在前面，走了几步，停住了。',
+      '风里有早点摊的味道。你忽然想起来，你们已经很多年没有一起吃过早饭。'
+    ],
+    spk:'{N}', quote:'到站了。……你还有话吗。',
+    choices:[
+      {t:'「有。这句话我憋了{Y}。」', eff:{truth:15,knot:-15,face:-10}, huazi:'终于说出口',
+       reply:'ta 把箱子放下，转过来，很认真地听。你说了很久，久到接车的司机按了两次喇叭。'},
+      {t:'「没有。一路顺风。」', eff:{face:10,knot:10,truth:-5},
+       reply:'「嗯，你也一样。」ta 拉着箱子走了。走到车门边，没有回头。'},
+      {t:'「有，但我说不出口。」', eff:{truth:5,knot:2,face:-1},
+       reply:'「我知道。」ta 说，「我也有。」然后 ta 还是走了。'},
+      {t:'「有。那件事，我还是没法原谅你。」', eff:{truth:8,knot:5,face:-5}, flags:['finalTruth'],
+       reply:'「好。」ta 点点头，很轻地说，「谢谢你至少说了实话。」'}
+    ]
+  }
+];
+
+/* ============ 五种结局 ============ */
+const ENDINGS = {
+  reunion:{
+    key:'reunion', title:'后会有期', huazi:'这一次，是真的有期',
+    paras:[
+      '你们没有复婚式地和好，也没有抱着哭。',
+      '只是把这十八天里说出口的、没说出口的，摊在月台上一件一件认领。{N}说：「那我们……以后还能一起吃饭吗。」你说：「能。」',
+      '节目组的字幕打上来的时候，你们已经在早点摊坐下了。豆浆两碗，一根油条掰成两半。'
+    ],
+    line:'「后会有期」原来真的是这个意思——不是再也不见，是终于约上了下一顿。',
+    obs:'观察室：这是本季唯一一对，把「以后」说到了具体哪一天。'
+  },
+  polite:{
+    key:'polite', title:'体面收口', huazi:'有些关系，走到最好看的地方就够了',
+    paras:[
+      '你们在月台上很客气地道别，加了微信，说以后常联系。',
+      '那天晚上 ta 发来一条：「到了。」你回：「好。」',
+      '之后再没有第三句。但这一次，你们都没有删掉对方。',
+      '不是所有走散都要强行圆满。有些关系最好的结局，是终于坐下来，把那句「其实我一直没放下」说出口——然后各走各路。'
+    ],
+    line:'后会有期，不一定是再续前缘。也可能是：我终于不再拿你困自己了。',
+    obs:'观察室：这段播完，超话里全是「我也有一个这样的人」。'
+  },
+  cage:{
+    key:'cage', title:'画地为牢', huazi:'你困住的从来不是 ta',
+    paras:[
+      '你说了很多，但没有一句是那句。',
+      '车开走的时候，你还站在月台上，看那节车厢的窗户一格一格地过去。你在想，如果那天你说的是另一句话，会不会不一样。',
+      '{N}后来在采访里说：「我一直在等 ta 开口。」你在另一个采访间里说：「我一直在等 ta 先开口。」',
+      '两个人都等，就等了这么多年。'
+    ],
+    line:'所谓画地为牢，从来不是别人囚禁你，是你自己放不下一段旧关系，心甘情愿停在原地。',
+    obs:'观察室：这集播出后，「画地为牢」这个词条挂了两天。'
+  },
+  meme:{
+    key:'meme', title:'名场面', huazi:'这段播出去，热搜第一',
+    paras:[
+      '你们没有和解，也没有撕破脸——你们撕了，但撕得很有节目效果。',
+      '剪辑师把你们的阴阳怪气剪成一个合集，配快节奏 BGM，播放量比正片还高。',
+      '评论区一半在骂你，一半在骂 ta，剩下一半在说「这不就是我和我前闺蜜」。',
+      '{N}后来发了条微博：「谢谢节目组，让我知道我们真的回不去了。」你转发了，配了一个句号。'
+    ],
+    line:'有些关系不是走散的，是终于说清楚了——然后各自下车。',
+    obs:'观察室：本季名场面 TOP1。节目组：这波我们也没想到。'
+  },
+  part:{
+    key:'part', title:'各自下车', huazi:'承认那个人真的来过，也真的走了',
+    paras:[
+      '你们在月台上互相点了点头，像两个认识的同事。',
+      '没有拥抱，没有眼泪，没有那种会在预告片里出现的镜头。',
+      '但上车之前，你还是回头看了一眼——ta 已经上车了，正低头看手机。',
+      '你想，就这样吧。你们已经用十八天，把该说的都说了，虽然说得不太好。'
+    ],
+    line:'有些人教会你的最后一件事，是怎么好好说再见。',
+    obs:'观察室：这对最像我们自己。'
+  }
+};
+
+function decideEnding(){
+  const s = state;
+  if(s.sarcasm>=4 && s.truth<55) return ENDINGS.meme;
+  if(s.truth>=60 && s.knot<=45 && (s.flags.readLetter||s.flags.heard)) return ENDINGS.reunion;
+  if(s.knot>=72 || s.avoid>=4) return ENDINGS.cage;
+  if(s.truth>=52 && s.knot<=62) return ENDINGS.part;
+  return ENDINGS.polite;
+}
+
+/* ============ 登记流程 ============ */
+let stepIdx = 0;
+const STEPS = [
+  {key:'p', type:'text', q:'先登记一下。你叫什么？', hint:'随便写。反正节目组会打马赛克。',
+   ph:'你的名字 / 昵称', def:'你', max:12},
+  {key:'n', type:'text', q:'那个人的名字呢？', hint:'不用全名。一个你叫得出口的称呼就行。',
+   ph:'ta 的名字 / 外号', def:'ta', max:12},
+  {key:'years', type:'opt', q:'你们断联多久了？', hint:'选一个最接近的。节目组不查证。', opts:YEARS_OPTS},
+  {key:'reason', type:'opt', q:'当年是因为什么？', hint:'不用说得太清楚。你自己清楚就行。', opts:REASON_OPTS},
+  {key:'secret', type:'text', q:'有一句话，你到现在都没说出口。', hint:'写下来，它会出现在第十四天那封信里。不想写就跳过。',
+   ph:'那句话……', def:'', max:60, optional:true}
+];
+
+function renderDots(){
+  const d = $('#dots');
+  d.innerHTML = STEPS.map((_,i)=>'<i class="'+(i<=stepIdx?'on':'')+'"></i>').join('');
+}
+
+function renderStep(){
+  const st = STEPS[stepIdx];
+  const box = $('#stepBox');
+  renderDots();
+  let body = '';
+  if(st.type==='text'){
+    body = '<input class="field" id="inp" maxlength="'+st.max+'" placeholder="'+st.ph+'" autocomplete="off" '+
+           'autocapitalize="off" spellcheck="false">'+
+           '<button class="btn primary wide" id="nextBtn">'+(stepIdx===STEPS.length-1?'上 车':'下 一 步')+'</button>';
+  } else {
+    body = st.opts.map((o,i)=>'<button class="opt" data-i="'+i+'"><span class="k">'+
+      'ABCD'[i]+'</span><span>'+o.label+'</span></button>').join('');
+  }
+  box.innerHTML =
+    '<div class="step-no">登记 '+String(stepIdx+1).padStart(2,'0')+' / '+String(STEPS.length).padStart(2,'0')+'</div>'+
+    '<h2 class="step-q">'+st.q+'</h2>'+
+    '<p class="step-hint">'+st.hint+'</p>'+
+    '<div class="step-body">'+body+'</div>';
+
+  if(st.type==='text'){
+    const inp = $('#inp');
+    setTimeout(()=>inp.focus(),260);
+    const go = ()=>{
+      const raw = inp.value.trim().slice(0, st.max);
+      applyStep(st, raw);
+    };
+    $('#nextBtn').addEventListener('click', go);
+    inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
+  } else {
+    box.querySelectorAll('.opt').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const o = st.opts[+el.dataset.i];
+        el.classList.add('sel');
+        applyStep(st, o);
+      });
+    });
+  }
+}
+
+function applyStep(st, val){
+  if(st.key==='p') state.p = (typeof val==='string' && val) ? val : st.def;
+  if(st.key==='n') state.n = (typeof val==='string' && val) ? val : st.def;
+  if(st.key==='secret') state.secret = (typeof val==='string') ? val : '';
+  if(st.key==='years'){ state.yearsText = val.text; state.yearsLabel = val.label; }
+  if(st.key==='reason'){ state.reason = val.label; state.moment = val.moment; }
+
+  stepIdx++;
+  if(stepIdx >= STEPS.length){ startGame(); return; }
+  renderStep();
+}
+
+/* ============ 正片 ============ */
+const barEls = {
+  knot:$('#barKnot'), truth:$('#barTruth'), face:$('#barFace')
+};
+function renderBars(){
+  barEls.knot.style.width = clamp(state.knot,0,100)+'%';
+  barEls.truth.style.width = clamp(state.truth,0,100)+'%';
+  barEls.face.style.width = clamp(state.face,0,100)+'%';
+}
+
+function apply(eff, flags){
+  eff = eff || {};
+  state.knot  = clamp(state.knot  + (eff.knot||0), 0, 100);
+  state.truth = clamp(state.truth + (eff.truth||0), 0, 100);
+  state.face  = clamp(state.face  + (eff.face||0), 0, 100);
+  state.avoid += (eff.avoid||0);
+  state.sarcasm += (eff.sarcasm||0);
+  (flags||[]).forEach(f=>state.flags[f]=true);
+  renderBars();
+}
+
+let revealTimers = [];
+let phase = 'idle';
+
+function startGame(){
+  state.scene = 0;
+  show('scr-game');
+  renderBars();
+  startDanmaku();
+  playScene();
+}
+
+function playScene(){
+  const sc = SCENES[state.scene];
+  $('#hudDay').innerHTML = sc.day + '<small id="hudPlace">'+sc.place+'</small>';
+  $('#sceneTag').textContent = sc.tag;
+  $('#quoteBox').hidden = true;
+  $('#quoteBox').classList.remove('in');
+  $('#choices').innerHTML = '';
+  $('#tapHint').style.visibility = 'visible';
+
+  const nar = $('#narration');
+  nar.innerHTML = '';
+  sc.lines.forEach(ln=>{
+    const p = document.createElement('p');
+    p.textContent = fmt(ln);
+    nar.appendChild(p);
+  });
+
+  phase = 'reveal';
+  revealTimers.forEach(clearTimeout);
+  revealTimers = [];
+  const nodes = Array.from(nar.children);
+  let i = 0;
+  const step = ()=>{
+    if(i >= nodes.length){ finishReveal(); return; }
+    nodes[i].classList.add('in');
+    i++;
+    revealTimers.push(setTimeout(step, 1150));
+  };
+  step();
+}
+
+function finishReveal(){
+  if(phase !== 'reveal') return;
+  revealTimers.forEach(clearTimeout);
+  revealTimers = [];
+  Array.from($('#narration').children).forEach(n=>n.classList.add('in'));
+  const sc = SCENES[state.scene];
+  $('#spkName').textContent = fmt(sc.spk);
+  $('#quoteText').textContent = '「' + fmt(sc.quote) + '」';
+  $('#quoteBox').hidden = false;
+  requestAnimationFrame(()=>$('#quoteBox').classList.add('in'));
+  showChoices();
+}
+
+function showChoices(){
+  const sc = SCENES[state.scene];
+  const box = $('#choices');
+  box.innerHTML = '';
+  sc.choices.forEach((c,idx)=>{
+    const b = document.createElement('button');
+    b.className = 'choice';
+    b.style.animationDelay = (idx*0.06)+'s';
+    b.innerHTML = '<span class="k">'+['A','B','C','D'][idx]+'</span><span>'+fmt(c.t)+'</span>';
+    b.addEventListener('click', ()=>pick(idx));
+    box.appendChild(b);
+  });
+  phase = 'choices';
+  $('#tapHint').style.visibility = 'hidden';
+}
+
+function pick(idx){
+  if(phase !== 'choices') return;
+  phase = 'reply';
+  const sc = SCENES[state.scene];
+  const c = sc.choices[idx];
+  apply(c.eff, c.flags);
+  if(c.huazi) huazi(c.huazi);
+
+  const reply = fmt(c.reply);
+  const isAside = /^[（(]/.test(reply);
+  const box = $('#choices');
+  box.querySelectorAll('.choice').forEach(el=>el.classList.add('dim'));
+  const div = document.createElement('div');
+  div.className = 'reply';
+  div.innerHTML = (isAside ? '' : '<span class="who">'+fmt(state.n)+'</span>') +
+                  '<p>'+reply+'</p>';
+  box.innerHTML = '';
+  box.appendChild(div);
+  const btn = document.createElement('button');
+  btn.className = 'btn primary wide';
+  btn.textContent = (state.scene >= SCENES.length-1) ? '走到月台尽头' : '继续';
+  btn.style.marginTop = '14px';
+  btn.addEventListener('click', nextScene);
+  box.appendChild(btn);
+}
+
+function nextScene(){
+  state.scene++;
+  if(state.scene >= SCENES.length){ showEnding(); return; }
+  if([2,4,6].includes(state.scene)){ showInterlude(); return; }
+  playScene();
+}
+
+/* 点击 / 空格推进 */
+$('#stage').addEventListener('click', ()=>{
+  if(phase === 'reveal') finishReveal();
+});
+document.addEventListener('keydown', e=>{
+  if((e.key===' '||e.key==='Enter')){
+    if($('#scr-game').classList.contains('on') && phase==='reveal'){
+      e.preventDefault(); finishReveal();
+    }
+  }
+});
+
+/* ============ 花字 ============ */
+function huazi(text){
+  const el = document.createElement('div');
+  el.className = 'huazi';
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 2300);
+}
+
+/* ============ 弹幕 ============ */
+const DM_POOL = [
+  '这车厢空气好安静','我哭死','节目组快加更','hhhhhhh','这就是我',
+  '求 BGM 名字','前面的让让','不敢看下一集','我也有一个这样的人',
+  '这真的能播吗','已经开始想 ta 了','摄像机别停','突然好想给我妈打电话',
+  '这十八天是怎么熬过来的','宝，别说了，都在酒里','弹幕比正片好看',
+  '我宣布这是本季最佳','救命 我在上班看哭了','这不叫综艺 这叫体检'
+];
+let dmTimer = null, dmOn = true;
+function spawnDanmaku(){
+  if(!dmOn) return;
+  const layer = $('#danmaku');
+  if(!layer || layer.children.length > 14) return;
+  const el = document.createElement('div');
+  el.className = 'dm';
+  el.textContent = DM_POOL[Math.floor(Math.random()*DM_POOL.length)];
+  el.style.top = rnd(10,72).toFixed(1)+'vh';
+  el.style.fontSize = rnd(11,14).toFixed(1)+'px';
+  const dur = rnd(9,14).toFixed(1);
+  el.style.animationDuration = dur+'s';
+  layer.appendChild(el);
+  setTimeout(()=>el.remove(), (+dur+1)*1000);
+}
+function startDanmaku(){
+  if(dmTimer) clearInterval(dmTimer);
+  dmTimer = setInterval(()=>{
+    if($('#scr-game').classList.contains('on')) spawnDanmaku();
+  }, 2300);
+}
+
+/* ============ 观察室 ============ */
+function interludeData(){
+  const s = state;
+  const out = [];
+  if(s.sarcasm>=2) out.push(['王姐','这两位是来录综艺的，还是来打辩论的。']);
+  else if(s.truth>=45) out.push(['小鹿','我没想到 ta 会先松口。']);
+  else out.push(['老周','车厢里安静得有点过分了。']);
+
+  if(s.knot>=75) out.push(['小鹿','心结还在涨。这趟车再开十天，也没用。']);
+  else if(s.knot<=45) out.push(['老周','心结在掉。掉得很慢，但是真的在掉。']);
+  else out.push(['王姐','卡住了。谁也不肯先往下走一步。']);
+
+  if(s.face>=70) out.push(['王姐','面子是保住了，人快没了。']);
+  else if(s.truth>=55) out.push(['小鹿','ta 们在说真话了。真的那种。']);
+  else out.push(['老周','还有点时间。别急。']);
+
+  return out;
+}
+
+function showInterlude(){
+  const list = $('#obsList');
+  list.innerHTML = '';
+  const data = interludeData();
+  data.forEach(([who,txt],i)=>{
+    const el = document.createElement('div');
+    el.className = 'obs-card';
+    el.style.animationDelay = (i*0.35)+'s';
+    el.innerHTML = '<div class="who">'+who+'</div><p>「'+txt+'」</p>';
+    list.appendChild(el);
+  });
+  show('scr-inter');
+}
+$('#obsNext').addEventListener('click', ()=>{
+  show('scr-game');
+  playScene();
+});
+
+/* ============ 结局 ============ */
+let currentEnding = null;
+
+function showEnding(){
+  const e = decideEnding();
+  currentEnding = e;
+  $('#endLabel').textContent = '第 18 天 · 终点站 · 本季第五对过期朋友';
+  $('#endTitle').textContent = e.title;
+  $('#endHuazi').textContent = '「' + e.huazi + '」';
+  $('#endBody').innerHTML = e.paras.map(p=>'<p>'+fmt(p)+'</p>').join('');
+  $('#endLine').textContent = fmt(e.line);
+  $('#endObs').innerHTML = '<b>'+e.obs+'</b>';
+
+  const stats = [];
+  stats.push('心结 <b>'+state.knot+'</b>');
+  stats.push('真心 <b>'+state.truth+'</b>');
+  stats.push('面子 <b>'+state.face+'</b>');
+  if(state.avoid) stats.push('回避 <b>'+state.avoid+'</b> 次');
+  if(state.sarcasm) stats.push('阴阳 <b>'+state.sarcasm+'</b> 次');
+  $('#endStats').innerHTML = stats.map(s=>'<span>'+s+'</span>').join('');
+
+  show('scr-ending');
+}
+
+$('#toCard').addEventListener('click', ()=>{
+  drawTicket();
+  show('scr-card');
+});
+$('#replay').addEventListener('click', resetAll);
+$('#again').addEventListener('click', resetAll);
+
+function resetAll(){
+  Object.assign(state, {
+    p:'你', n:'ta', yearsText:'三年', yearsLabel:'两三年', moment:'那天', reason:'', secret:'',
+    knot:72, truth:26, face:55, avoid:0, sarcasm:0, flags:{}, scene:0
+  });
+  stepIdx = 0;
+  currentEnding = null;
+  show('scr-setup');
+  renderStep();
+}
+
+/* ============ 车票 ============ */
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function wrap(ctx, text, x, y, maxW, lh){
+  const chars = String(text).split('');
+  const noStart = '。，、；：？！）」』…—%';
+  let line = '', lines = 0;
+  for(let i=0;i<chars.length;i++){
+    const test = line + chars[i];
+    if(ctx.measureText(test).width > maxW && line){
+      if(noStart.indexOf(chars[i]) >= 0){
+        line += chars[i];
+        ctx.fillText(line, x, y + lines*lh);
+        lines++; line = '';
+        continue;
+      }
+      ctx.fillText(line, x, y + lines*lh);
+      lines++; line = chars[i];
+    } else { line = test; }
+  }
+  if(line){ ctx.fillText(line, x, y + lines*lh); lines++; }
+  return lines;
+}
+
+function drawTicket(){
+  const cv = $('#ticket');
+  const ctx = cv.getContext('2d');
+  const W = 750, H = 1180;
+
+  // 背景
+  const g = ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#111c2f'); g.addColorStop(.55,'#0c1421'); g.addColorStop(1,'#070a12');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+  // 光晕
+  const rg = ctx.createRadialGradient(600,120,0,600,120,520);
+  rg.addColorStop(0,'rgba(242,183,106,.16)'); rg.addColorStop(1,'transparent');
+  ctx.fillStyle = rg; ctx.fillRect(0,0,W,H);
+
+  // 外框
+  roundRect(ctx,26,26,W-52,H-52,22);
+  ctx.strokeStyle = 'rgba(242,183,106,.28)'; ctx.lineWidth = 2; ctx.stroke();
+
+  // 顶部小标
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(242,183,106,.85)';
+  ctx.font = '600 22px "PingFang SC","Helvetica Neue",sans-serif';
+  ctx.fillText('后 会 友 期  ·  第 五 对 过 期 朋 友', W/2, 96);
+
+  ctx.fillStyle = '#f7e7c8';
+  ctx.font = '700 74px "Songti SC","STSong",serif';
+  ctx.fillText('乘 车 票', W/2, 190);
+
+  ctx.fillStyle = 'rgba(255,255,255,.30)';
+  ctx.font = '400 20px "PingFang SC",sans-serif';
+  ctx.fillText('18 天 · 24 节车厢 · 一趟不许下车的列车', W/2, 236);
+
+  // 虚线
+  ctx.setLineDash([10,10]);
+  ctx.strokeStyle = 'rgba(242,183,106,.35)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(76,286); ctx.lineTo(W-76,286); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 字段
+  ctx.textAlign = 'left';
+  const LX = 88, RX = 470;
+  const rows = [
+    ['乘车人', state.p],
+    ['同　行', state.n],
+    ['断　联', state.yearsLabel],
+    ['终　点', '月台']
+  ];
+  rows.forEach((r,i)=>{
+    const y = 350 + i*66;
+    ctx.fillStyle = 'rgba(255,255,255,.34)';
+    ctx.font = '400 21px "PingFang SC",sans-serif';
+    ctx.fillText(r[0], LX, y);
+    ctx.fillStyle = '#efe4cf';
+    ctx.font = '600 30px "Songti SC","STSong",serif';
+    const name = r[1];
+    ctx.fillText(name.length>12 ? name.slice(0,12)+'…' : name, LX+120, y);
+  });
+
+  // 结局名
+  const e = currentEnding || ENDINGS.part;
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(242,183,106,.65)';
+  ctx.font = '600 21px "PingFang SC",sans-serif';
+  ctx.fillText('本 次 结 局', W/2, 660);
+
+  const eg = ctx.createLinearGradient(W/2-200,700,W/2+200,790);
+  eg.addColorStop(0,'#fff6e4'); eg.addColorStop(.7,'#f0c88f'); eg.addColorStop(1,'#cf9f62');
+  ctx.fillStyle = eg;
+  ctx.font = '700 84px "Songti SC","STSong",serif';
+  ctx.fillText(e.title, W/2, 762);
+
+  // 花字印章
+  ctx.save();
+  ctx.translate(W/2, 830);
+  ctx.rotate(-0.035);
+  ctx.strokeStyle = 'rgba(201,72,47,.85)'; ctx.lineWidth = 3;
+  roundRect(ctx, -235, -34, 470, 68, 8); ctx.stroke();
+  ctx.fillStyle = 'rgba(201,72,47,.95)';
+  ctx.font = '600 25px "Songti SC","STSong",serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('「' + e.huazi + '」', 0, 10);
+  ctx.restore();
+
+  // 一句话
+  ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(236,229,214,.92)';
+  ctx.font = '400 26px "Songti SC","STSong",serif';
+  const quote = state.secret ? '「' + state.secret + '」' : '「' + fmt(e.line) + '」';
+  const lines = wrap(ctx, quote, 88, 930, W-176, 46);
+
+  // 底部分隔线 + 编号
+  ctx.setLineDash([8,8]);
+  ctx.strokeStyle = 'rgba(242,183,106,.22)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(88,1034); ctx.lineTo(W-88,1034); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 条形码装饰
+  ctx.fillStyle = 'rgba(255,255,255,.20)';
+  let bx = W-268;
+  while(bx < W-92){
+    const bw = Math.random() < .5 ? 2 : 4;
+    ctx.fillRect(bx, 1048, bw, 30);
+    bx += bw + (Math.random() < .5 ? 3 : 6);
+  }
+
+  const no = 'NO.' + String(Math.floor(rnd(100000,999999)));
+  ctx.fillStyle = 'rgba(255,255,255,.28)';
+  ctx.font = '400 19px "PingFang SC",sans-serif';
+  ctx.fillText(no, 88, 1114);
+
+  const d = new Date();
+  const dateStr = d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
+  ctx.textAlign = 'right';
+  ctx.fillText(dateStr + '  签发', W-88, 1114);
+
+  // 红色小圆章
+  ctx.save();
+  ctx.translate(632, 176); ctx.rotate(0.16);
+  ctx.strokeStyle = 'rgba(201,72,47,.55)'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(0,0,62,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle = 'rgba(201,72,47,.85)';
+  ctx.textAlign = 'center';
+  ctx.font = '700 26px "Songti SC","STSong",serif';
+  ctx.fillText('已到站', 0, -4);
+  ctx.font = '400 17px "PingFang SC",sans-serif';
+  ctx.fillText('本趟作废', 0, 26);
+  ctx.restore();
+}
+
+$('#dl').addEventListener('click', ()=>{
+  const cv = $('#ticket');
+  const a = document.createElement('a');
+  a.download = '后会友期-' + (currentEnding? currentEnding.title : '车票') + '.png';
+  a.href = cv.toDataURL('image/png');
+  a.click();
+});
+
+$('#copy').addEventListener('click', async ()=>{
+  const e = currentEnding || ENDINGS.part;
+  const txt = '我在《后会友期》模拟器里，和 ' + state.n + ' 断联 ' + state.yearsLabel +
+    '，十八天之后，我们的结局是「' + e.title + '」。\n' + e.huazi + '。\n' +
+    (state.secret ? '「' + state.secret + '」\n' : '') + '#后会友期 #第五对过期朋友';
+  try{
+    await navigator.clipboard.writeText(txt);
+    const btn = $('#copy');
+    const old = btn.textContent;
+    btn.textContent = '已复制';
+    setTimeout(()=>btn.textContent = old, 1500);
+  }catch(err){
+    window.prompt('复制下面这段：', txt);
+  }
+});
+
+/* ============ BGM（Web Audio 现场合成） ============ */
+const BGM = (function(){
+  let ctx=null, master=null, noise=null;
+  let chordTimer=null, clackTimer=null, chordI=0, playing=false, muted=false;
+  const CHORD_DUR = 6.4;
+  const CHORDS = [
+    [110.00,164.81,220.00,261.63],
+    [87.31,130.81,174.61,220.00],
+    [130.81,196.00,261.63,329.63],
+    [98.00,146.83,196.00,246.94]
+  ];
+  const MELODY = [440.00,523.25,587.33,659.25,783.99];
+
+  function ensure(){
+    if(ctx) return true;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return false;
+    ctx = new AC();
+    master = ctx.createGain();
+    master.gain.value = 0.0001;
+    const lp = ctx.createBiquadFilter();
+    lp.type='lowpass'; lp.frequency.value=4600;
+    master.connect(lp); lp.connect(ctx.destination);
+    // 简易混响，让铺底更soft
+    const conv = ctx.createConvolver();
+    conv.buffer = makeImpulse(2.4, 2.6);
+    const wet = ctx.createGain();
+    wet.gain.value = 0.3;
+    master.connect(conv); conv.connect(wet); wet.connect(lp);
+    const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate*2), ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i] = Math.random()*2-1;
+    noise = buf;
+    return true;
+  }
+
+  function makeImpulse(sec, decay){
+    const len = Math.floor(ctx.sampleRate*sec);
+    const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+    for(let ch=0; ch<2; ch++){
+      const d = buf.getChannelData(ch);
+      for(let i=0;i<len;i++){
+        d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, decay);
+      }
+    }
+    return buf;
+  }
+
+  function pad(freq, t0, dur, amp){
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.linearRampToValueAtTime(amp, t0+1.2);
+    g.gain.setValueAtTime(amp, t0+dur-2.2);
+    g.gain.linearRampToValueAtTime(0.0001, t0+dur);
+    const f = ctx.createBiquadFilter();
+    f.type='lowpass'; f.frequency.value=1100; f.Q.value=0.4;
+    g.connect(f); f.connect(master);
+    [-7,7].forEach(function(det){
+      const o = ctx.createOscillator();
+      o.type='triangle'; o.frequency.value=freq; o.detune.value=det;
+      o.connect(g); o.start(t0); o.stop(t0+dur+0.05);
+    });
+  }
+
+  function bell(freq, t0){
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.linearRampToValueAtTime(0.032, t0+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0+2.8);
+    const o = ctx.createOscillator(); o.type='sine'; o.frequency.value=freq;
+    const o2 = ctx.createOscillator(); o2.type='sine'; o2.frequency.value=freq*2.004;
+    const g2 = ctx.createGain(); g2.gain.value=0.22;
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
+    o.start(t0); o2.start(t0);
+    o.stop(t0+2.9); o2.stop(t0+2.9);
+  }
+
+  function clack(){
+    if(!ctx) return;
+    const t = ctx.currentTime + 0.02;
+    [0, 0.17].forEach(function(off){
+      const src = ctx.createBufferSource();
+      src.buffer = noise;
+      const bp = ctx.createBiquadFilter();
+      bp.type='bandpass'; bp.frequency.value=1500; bp.Q.value=1.4;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t+off);
+      g.gain.linearRampToValueAtTime(0.013, t+off+0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+off+0.1);
+      src.connect(bp); bp.connect(g); g.connect(master);
+      src.start(t+off); src.stop(t+off+0.14);
+    });
+  }
+
+  function chord(){
+    if(!ctx) return;
+    const t = ctx.currentTime + 0.06;
+    const notes = CHORDS[chordI % CHORDS.length];
+    const dur = CHORD_DUR + 1.6;
+    notes.forEach(function(f){ pad(f, t, dur, 0.05); });
+    pad(notes[0]/2, t, dur, 0.055);
+    if(Math.random() < 0.55){
+      bell(MELODY[Math.floor(Math.random()*MELODY.length)], t + 1.4 + Math.random()*3);
+    }
+    chordI++;
+  }
+
+  function start(){
+    if(muted) return;
+    if(!ensure()) return;
+    if(ctx.state === 'suspended') ctx.resume();
+    if(playing) return;
+    playing = true;
+    const now = ctx.currentTime;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(0.0001, now);
+    master.gain.linearRampToValueAtTime(0.62, now + 3.5);
+    chord();
+    chordTimer = setInterval(chord, CHORD_DUR*1000);
+    clackTimer = setInterval(clack, 1900);
+  }
+
+  function stop(){
+    if(!ctx || !playing) return;
+    playing = false;
+    const now = ctx.currentTime;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(master.gain.value || 0.62, now);
+    master.gain.linearRampToValueAtTime(0.0001, now + 0.9);
+    clearInterval(chordTimer); clearInterval(clackTimer);
+    chordTimer = clackTimer = null;
+    setTimeout(function(){
+      if(!playing && ctx && ctx.state === 'running') ctx.suspend();
+    }, 1300);
+  }
+
+  return {
+    start: start,
+    stop: stop,
+    toggle: function(){
+      if(playing){ muted = true; stop(); }
+      else { muted = false; start(); }
+      return playing;
+    },
+    isOn: function(){ return playing; }
+  };
+})();
+
+const bgmBtn = document.getElementById('bgmBtn');
+function syncBgmBtn(){
+  const on = BGM.isOn();
+  bgmBtn.classList.toggle('off', !on);
+  bgmBtn.setAttribute('aria-pressed', String(on));
+}
+bgmBtn.addEventListener('click', function(){ BGM.toggle(); syncBgmBtn(); });
+
+/* ============ 启动 ============ */
+$('#startBtn').addEventListener('click', ()=>{
+  BGM.start();
+  syncBgmBtn();
+  show('scr-setup');
+  renderStep();
+});
+
+syncBgmBtn();
+
+})();
+</script>
+</body>
+</html>
